@@ -2,13 +2,14 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { AppError } from '../../shared/http/errors.js';
 import { env } from '../../env.js';
-import { UserModel } from '../users/users.model.js';
+import { UserModel, OrganizationModel, type OrganizationType } from '../users/users.model.js';
 import type { SignupInput, LoginInput } from './auth.validation.js';
 
 export interface TokenPayload {
   userId: string;
   role: string;
   organizationId?: string;
+  organizationType?: OrganizationType;
 }
 
 function generateToken(payload: TokenPayload): string {
@@ -30,10 +31,17 @@ export async function signup(input: SignupInput) {
     role: 'user',
   });
 
+  let organizationType: OrganizationType | undefined;
+  if (user.organizationId) {
+    const organization = await OrganizationModel.findById(user.organizationId);
+    organizationType = organization?.type;
+  }
+
   const token = generateToken({
     userId: user._id.toString(),
     role: user.role,
     organizationId: user.organizationId?.toString(),
+    organizationType,
   });
 
   return {
@@ -58,10 +66,17 @@ export async function login(input: LoginInput) {
     throw new AppError(401, 'Invalid credentials', 'INVALID_CREDENTIALS');
   }
 
+  let organizationType: OrganizationType | undefined;
+  if (user.organizationId) {
+    const organization = await OrganizationModel.findById(user.organizationId);
+    organizationType = organization?.type;
+  }
+
   const token = generateToken({
     userId: user._id.toString(),
     role: user.role,
     organizationId: user.organizationId?.toString(),
+    organizationType,
   });
 
   return {
