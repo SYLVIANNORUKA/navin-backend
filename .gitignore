@@ -36,3 +36,14 @@ coverage/
 
 .agent/
 issue.md
+
+# Agent Skills
+.agents/*
+!.agents/skills/
+.agents/skills/*
+!.agents/skills/cleanup/
+!.agents/skills/cleanup/**
+!.agents/skills/cross-check/
+!.agents/skills/cross-check/**
+!.agents/skills/document/
+!.agents/skills/document/**
