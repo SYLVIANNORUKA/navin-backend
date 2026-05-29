@@ -16,7 +16,6 @@ import {
   deleteUserController,
   listUsersController,
   verifyInvitationController,
-  listUsersController,
 } from './users.controller.js';
 import { requireAuth } from '../../shared/middleware/requireAuth.js';
 import { requireRole } from '../../shared/middleware/requireRole.js';

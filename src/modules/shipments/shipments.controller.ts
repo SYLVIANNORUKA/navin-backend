@@ -91,7 +91,6 @@ export const uploadShipmentProof = async (req: Request, res: Response) => {
       notes,
     });
 
-  sendResponse(res, 200, true, 'Proof uploaded', shipment);
     sendResponse(res, 200, true, 'Proof uploaded', shipment);
   } catch {
     sendResponse(res, 500, false, 'Server error', null);

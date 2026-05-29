@@ -35,5 +35,4 @@ coverage/
 *.tsbuildinfo
 
 .agent/
-.agents/
-issue.md
+issue.md

@@ -4,18 +4,15 @@ import { randomUUID } from 'crypto';
 import { AppError } from '../../shared/http/errors.js';
 import { env } from '../../env.js';
 import { UserModel, OrganizationModel, UserRole } from '../users/users.model.js';
-import { OrganizationType } from '../../shared/types/user.js';
-import { UserModel, OrganizationModel, type OrganizationType, UserRole } from '../users/users.model.js';
+import type { OrganizationType } from '../../shared/types/user.js';
 import { blockToken } from '../../infra/redis/tokenBlocklist.js';
 import type { SignupInput, LoginInput } from './auth.validation.js';
-import { blockToken } from '../../infra/redis/tokenBlocklist.js';
 
 export interface TokenPayload {
   userId: string;
   role: string;
   organizationId?: string;
   organizationType?: OrganizationType;
-  jti?: string;
   jti: string;
 }
 
