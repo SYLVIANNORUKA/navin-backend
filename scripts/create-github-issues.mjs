@@ -31,7 +31,7 @@ function getLocalIssues() {
     .filter(f => {
       if (!f.startsWith('issue-') || !f.endsWith('.md')) return false;
       const num = parseInt(f.match(/\d+/)[0], 10);
-      return num >= 41 && num <= 55;
+      return num >= 56 && num <= 65;
     })
     .sort((a, b) => {
       const na = parseInt(a.match(/\d+/)[0], 10);
@@ -46,7 +46,22 @@ function getLocalIssues() {
   });
 }
 
+function ensureLabel(label) {
+  try {
+    execSync(
+      `gh label create ${JSON.stringify(label)} --repo ${REPO} --description "Documentation and API quality assurance issues" --color "5319E7"`,
+      { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }
+    );
+    console.log(`Created label: ${label}`);
+  } catch {
+    console.log(`Label "${label}" already exists or creation skipped.`);
+  }
+}
+
 function main() {
+  const LABEL = 'API-QA';
+  ensureLabel(LABEL);
+
   console.log('Fetching existing GitHub issue titles...');
   const ghTitles = getGitHubIssueTitles();
   console.log(`Found ${ghTitles.length} existing GitHub issues.`);
@@ -80,7 +95,7 @@ function main() {
     console.log(`Creating: ${issue.title}`);
     try {
       execSync(
-        `gh issue create --repo ${REPO} --title ${JSON.stringify(issue.title)} --body-file ${JSON.stringify(bodyPath)}`,
+        `gh issue create --repo ${REPO} --title ${JSON.stringify(issue.title)} --body-file ${JSON.stringify(bodyPath)} --label ${JSON.stringify(LABEL)}`,
         { encoding: 'utf-8', stdio: 'inherit' }
       );
     } catch (err) {
